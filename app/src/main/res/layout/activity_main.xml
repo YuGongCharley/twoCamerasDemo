@@ -13,11 +13,11 @@
         <SurfaceView
             android:id="@+id/redsurface"
             android:layout_width="fill_parent"
-            android:layout_height="450dp"/>
+            android:layout_height="350dp"/>
         <SurfaceView
             android:id="@+id/colorsurface"
             android:layout_width="fill_parent"
-            android:layout_height="450dp" />
+            android:layout_height="350dp" />
 
     </LinearLayout>
 
