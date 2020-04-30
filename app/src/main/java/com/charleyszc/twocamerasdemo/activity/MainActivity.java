@@ -8,6 +8,7 @@ import android.os.Bundle;
 
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -72,15 +73,16 @@ public class MainActivity extends BaseActivity{
         redCamera = Camera.open(0);
         redCamera.setDisplayOrientation(90);
 
-        Camera.Parameters parameters = redCamera.getParameters();
-        final int w = parameters.getPreviewSize().width;
-        final int h = parameters.getPreviewSize().height;
-        redCamera.setPreviewCallback(new Camera.PreviewCallback() {
-            @Override
-            public void onPreviewFrame(byte[] data, Camera camera) {
-                PreviewImage.setRedPic(data, w, h);
-            }
-        });
+//        Camera.Parameters parameters = redCamera.getParameters();
+//        final int w = parameters.getPreviewSize().width;
+//        final int h = parameters.getPreviewSize().height;
+//        redCamera.setPreviewCallback(new Camera.PreviewCallback() {
+//            @Override
+//            public void onPreviewFrame(byte[] data, Camera camera) {
+////                PreviewImage.setRedPic(data, w, h);
+//                Log.e("surfaceHolderRed","获取帧回调");
+//            }
+//        });
         redCamera.startPreview();   //显示相机
 
         System.out.println("打开摄像机");
@@ -89,19 +91,10 @@ public class MainActivity extends BaseActivity{
             public void surfaceCreated(SurfaceHolder holder) {
                 try {
                     redCamera.setPreviewDisplay(holder);
-                    Camera.Parameters parameters = redCamera.getParameters();
-                    final int w = parameters.getPreviewSize().width;
-                    final int h = parameters.getPreviewSize().height;
-                    redCamera.setPreviewCallback(new Camera.PreviewCallback() {
-                        @Override
-                        public void onPreviewFrame(byte[] data, Camera camera) {
-                            PreviewImage.setColorPic(data, w, h);
-                        }
-                    });
+//
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                redCamera.startPreview();
             }
 
             @Override
@@ -118,36 +111,28 @@ public class MainActivity extends BaseActivity{
 
     public void initColorCamera() {
         colorCamera = Camera.open(1);
-        colorCamera.setDisplayOrientation(90);
+        colorCamera.setDisplayOrientation(270);
         Camera.Parameters parameters = colorCamera.getParameters();
         final int w = parameters.getPreviewSize().width;
         final int h = parameters.getPreviewSize().height;
-        colorCamera.setPreviewCallback(new Camera.PreviewCallback() {
-            @Override
-            public void onPreviewFrame(byte[] data, Camera camera) {
-                PreviewImage.setColorPic(data, w, h);
-            }
-        });
+//        colorCamera.setPreviewCallback(new Camera.PreviewCallback() {
+//            @Override
+//            public void onPreviewFrame(byte[] data, Camera camera) {
+////                PreviewImage.setColorPic(data, w, h);
+//            }
+//        });
         colorCamera.startPreview();   //显示相机
 
         surfaceHolderColor.addCallback(new SurfaceHolder.Callback() {
             @Override
             public void surfaceCreated(SurfaceHolder holder) {
                 try {
+
                     colorCamera.setPreviewDisplay(holder);
-                    Camera.Parameters parameters = colorCamera.getParameters();
-                    final int w = parameters.getPreviewSize().width;
-                    final int h = parameters.getPreviewSize().height;
-                    colorCamera.setPreviewCallback(new Camera.PreviewCallback() {
-                        @Override
-                        public void onPreviewFrame(byte[] data, Camera camera) {
-                            PreviewImage.setColorPic(data, w, h);
-                        }
-                    });
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                colorCamera.startPreview();
             }
 
             @Override
@@ -167,6 +152,17 @@ public class MainActivity extends BaseActivity{
         super.onResume();
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        if (redCamera != null){
+            redCamera.startPreview();
+        }
+
+        if (colorCamera != null){
+            colorCamera.startPreview();
+        }
+    }
 
     @Override
     protected void onDestroy() {
